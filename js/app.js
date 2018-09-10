@@ -172,3 +172,5 @@ function gotAMatch(lastFlipped, card) {
 //     });
 //   };
 // }
+// enable reset on click of reset icon 
+document.querySelector('i.fa-repeat').addEventListener('click',function(){resetTheDeck()});

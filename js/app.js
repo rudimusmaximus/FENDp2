@@ -1,6 +1,73 @@
+// explore some possible global values to use
+let matchCount = 1;
+const totalCardsInDeck = 16;
+let unmatchedCandidateCount = 1;
+let starCount = 3;
+let currentElement = null;
+
+
 /*
  * Create a list that holds all of your cards
  */
+let allTheCardsNodeList = document.querySelectorAll('ul.deck li');
+let allTheCardsArray = Array.from(allTheCardsNodeList);
+
+/*
+ * exploring how
+ */
+function showAll() {
+  let x = 0;
+  do {
+    allTheCardsNodeList[x].classList.add('show');
+    x++;
+  } while (x < totalCardsInDeck);
+  console.log('show all');
+}
+/*
+ * exploring how
+ */
+function hideAll() {
+  let y = 0;
+  do {
+    allTheCardsNodeList[y].classList.remove('show');
+    y++;
+  } while (y < totalCardsInDeck);
+  console.log('hide all');
+}
+
+/*
+ * puts cards face down, forgets open, matches, and shuffles deck
+ */
+function resetTheDeck() {
+  //hide, unmatch
+  let i = 0;
+  do {
+    allTheCardsNodeList[i].classList.remove('match', 'open','show');
+    i++;
+  } while (i < totalCardsInDeck);
+  //shuffle
+  allTheCardsNodeList = document.querySelectorAll('ul.deck li');
+  allTheCardsArray = Array.from(allTheCardsNodeList);
+  let allTheCardsShuffled = shuffle(allTheCardsArray)
+  let deck = document.querySelector('ul.deck');
+  //remove cards on screen
+  i = 0;
+  do {
+    deck.removeChild(allTheCardsNodeList[i]);
+    i++;
+  } while (i < totalCardsInDeck);
+
+  //replace cards from shuffled array
+  i = 0;
+  do {
+    deck.appendChild(allTheCardsShuffled[i]);
+    i++;
+  } while (i < totalCardsInDeck);
+
+  console.log('reset complete');
+}
+
+
 
 
 /*
@@ -12,17 +79,18 @@
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+  var currentIndex = array.length,
+    temporaryValue, randomIndex;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
 
-    return array;
+  return array;
 }
 
 

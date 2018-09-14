@@ -1,14 +1,12 @@
 // explore some possible global values to use
+let clickIsOk = true;
+let openCount = 0;
 let matchCount = 0;
 let pairCount = 0;
 const totalCardsInDeck = 16;
-let unmatchedCandidateCount = 1;
 let starCount = 3;
-let currentElement = null;
 let lastFlipped = null;
-let openCount = 0;
 let wonBoolean = false;
-let clickIsOk = true;
 /*
  * Create a list that holds all of your cards
  */
@@ -66,17 +64,17 @@ function resetTheDeck() {
     deck.appendChild(allTheCardsShuffled[i]);
     i++;
   } while (i < totalCardsInDeck);
+  //reset counts
+  matchCount = 0;
+  pairCount = 0;
+  openCount = 0;
+  lastFlipped = null;
 
   console.log('reset complete');
 }
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
+/**
+ * Shuffle function from http://stackoverflow.com/a/2450976
  */
-
-// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
   var currentIndex = array.length,
     temporaryValue, randomIndex;
@@ -94,16 +92,17 @@ function shuffle(array) {
 
 
 /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
+/**
+ * setup click logic counts pairs and matches using a last flipped approach
+ * clickOk boolean used to prevent over clicking
+ * counts determine winner
+ * manipulates class to show and hide cards
+ *
+ */
 document.querySelectorAll('li.card').forEach(function(card) {
   card.addEventListener('click', function() {
     if ((clickIsOk) && (openCount < 2)) {
@@ -113,25 +112,31 @@ document.querySelectorAll('li.card').forEach(function(card) {
       } else if (card.classList.contains('open')) {
         console.log('already opened')
       } else {
-          card.classList.add('open', 'show');
-          openCount++;
-        }
+        card.classList.add('open', 'show');
+        openCount++;
+      }
       if (lastFlipped) {
         if (gotAMatch(lastFlipped, card)) {
+
           console.log('we have a match');
+
           //take both and make them a match
-          document.querySelectorAll('li.card.open.show').forEach(function(card) {
-            card.classList.add('match');
-            card.classList.remove('open');
-            matchCount++;
-            openCount = 0;
-            lastFlipped = null;
-            pairCount++;
-            if ((pairCount === 8) && (matchCount === 16)) {
-              wonBoolean = true;
-              console.log('we have a winner!');
-            }
-          })
+          card.classList.add('match');
+          matchCount++;
+          card.classList.remove('open');
+          openCount--;
+          lastFlipped.classList.add('match');
+          matchCount++;
+          lastFlipped.classList.remove('open');
+          openCount--;
+
+          lastFlipped = null;
+          pairCount++;
+          if ((pairCount === 8) && (matchCount === 16)) {
+            //if (matchCount === 16) {
+            wonBoolean = true;
+            console.log('we have a winner!');
+          }
         } else if (openCount === 2) { //not a match and two open cards showing
           clickIsOk = false;
           setTimeout(function onTimeout() {
@@ -153,6 +158,10 @@ document.querySelectorAll('li.card').forEach(function(card) {
   }); //end addEventListener
 }); //end querySelectorAll
 
+/**
+ * uses class list of childElement to match images
+ * returns Boolean whether matched
+ */
 function gotAMatch(lastFlipped, card) {
   //if (document.querySelectorAll('li.card.open.show:not(.match)').length < 2) {
   if (openCount < 2) {
@@ -164,47 +173,10 @@ function gotAMatch(lastFlipped, card) {
   }
   return false;
 }
-/////TODO: placeholder draft code to remove...wip
-// function clickLogic(card) {
-//   console.log('card clicked');
-//   if (card.classList.contains('match')) {
-//     console.log('already matched')
-//   } else if (card.classList.contains('open')) {
-//     console.log('already opened')
-//   } else {
-//     card.classList.add('open');
-//   }
-//   if (lastFlipped) {
-//     //            gotAMatch(lastFlipped,card);
-//     console.log('check for match and add match class to if we do');
-//     lastFlipped = card;
-//   } else {
-//     lastFlipped = card;
-//   }
-// }
 
-// function makeCardsFlipAble() {
-//   document.querySelectorAll('li.card').forEach(function(card) {
-//     card.addEventListener('click', function(){
-//       console.log('card clicked');
-//       if (card.classList.contains('match')) {
-//         console.log('already matched')
-//       } else if (card.classList.contains('open')) {
-//         console.log('already opened')
-//       } else {
-//         card.classList.add('open');
-//       }
-//       if (lastFlipped) {
-//         //            gotAMatch(lastFlipped,card);
-//         console.log('check for match and add match class to if we do');
-//         lastFlipped = card;
-//       } else {
-//         lastFlipped = card;
-//       }
-//     });
-//   };
-// }
-// enable reset on click of reset icon
+/**
+ * enable reset on click of reset icon
+ */
 document.querySelector('i.fa-repeat').addEventListener('click', function() {
   resetTheDeck()
 });

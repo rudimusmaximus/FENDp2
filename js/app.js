@@ -42,9 +42,9 @@ function resetTheDeck() {
   pairCount = 0;
   openCount = 0;
   moveCount = 0;
-  document.querySelector('.moves').textContent = ' '+moveCount;//on screen
+  document.querySelector('.moves').textContent = ' ' + moveCount; //on screen
   lastFlipped = null;
-
+  resetTheStars();
   clickIsOk = true;
   console.log('reset complete');
 }
@@ -67,27 +67,45 @@ function shuffle(array) {
 /*
  * increments the move counter and displays it on the page
  */
- function incrementMoveCounter(){
-   moveCount++;
-   //update screen
-   document.querySelector('.moves').textContent = ' '+moveCount;
-   if((moveCount === 16) || (moveCount === 32) || (moveCount === 48)){
-     demoteStar();
-   }
- }
- /**
-  * removes one stars
-  */
-  function demoteStar(){
-    document.querySelectorAll('.stars')[0].lastElementChild.remove('.fa-star');
+function incrementMoveCounter() {
+  moveCount++;
+  //update screen
+  document.querySelector('.moves').textContent = ' ' + moveCount;
+  if ((moveCount === 16) || (moveCount === 32)) {
+    demoteStar();
   }
- /**
-  * display winning message with final score
-  */
-  function youWonMessenger(){
-    clickIsOk = false;
-    console.log('we have a winner!');
+}
+/**
+ * removes one stars
+ */
+function demoteStar() {
+  document.querySelectorAll('.stars')[0].lastElementChild.remove('.fa-star');
+}
+/**
+ * Reset the stars to three
+ */
+function resetTheStars() {
+  let nodeOfStars = document.querySelectorAll('.stars'); //the three given
+  let arrayOfStars = Array.from(nodeOfStars);
+
+  let howManyMakeThree = 3 - arrayOfStars[0].childElementCount;
+  let i = 0;
+  if (howManyMakeThree > 0) {
+    do {
+      arrayOfStars[0].insertAdjacentHTML('beforeend', '<li><i class="fa fa-star"></i></li>');
+      i++;
+    } while (i < howManyMakeThree);
+  } else {
+    return;
   }
+}
+/**
+ * display winning message with final score
+ */
+function youWonMessenger() {
+  clickIsOk = false;
+  console.log('we have a winner!');
+}
 /**
  * uses class list of childElement to match images
  * returns Boolean whether matched
@@ -151,7 +169,7 @@ document.querySelectorAll('li.card').forEach(function(card) {
               openCount = 0;
               lastFlipped = null;
             })
-          }, 1000);
+          }, 700);
           clickIsOk = true;
         }
         lastFlipped = card;

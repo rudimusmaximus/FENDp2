@@ -1,41 +1,14 @@
 // explore some possible global values to use
-let clickIsOk = false;
-let openCount = 0;
-let matchCount = 0;
-let pairCount = 0;
+let clickIsOk, wonBooolean = false;
+let openCount, matchCount, pairCount = 0;
 const totalCardsInDeck = 16;
 let starCount = 3;
 let lastFlipped = null;
-let wonBoolean = false;
 /*
  * Create a list that holds all of your cards
  */
 let allTheCardsNodeList = document.querySelectorAll('ul.deck li');
-let allTheCardsArray = Array.from(allTheCardsNodeList);
-
-/*
- * exploring how
- */
-function showAll() {
-  let x = 0;
-  do {
-    allTheCardsNodeList[x].classList.add('show');
-    x++;
-  } while (x < totalCardsInDeck);
-  console.log('show all');
-}
-/*
- * exploring how
- */
-function hideAll() {
-  let y = 0;
-  do {
-    allTheCardsNodeList[y].classList.remove('show');
-    y++;
-  } while (y < totalCardsInDeck);
-  console.log('hide all');
-}
-
+let allTheCardsArray = null;
 /*
  * puts cards face down, forgets open, matches, and shuffles deck
  */
@@ -87,22 +60,40 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
   return array;
 }
-
-
 /*
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ * increments the move counter and displays it on the page
  */
+ function incrementMoveCounter(){
 
+ }
+ /**
+  * display winning message with final score
+  */
+  function youWonMessenger(){
+
+  }
+/**
+ * uses class list of childElement to match images
+ * returns Boolean whether matched
+ */
+function gotAMatch(lastFlipped, card) {
+  //if (document.querySelectorAll('li.card.open.show:not(.match)').length < 2) {
+  if (openCount < 2) {
+    return false;
+    //  } else if ((document.querySelectorAll('li.card.open.show:not(.match)').length === 2) &&
+  } else if ((openCount === 2) &&
+    (card.firstElementChild.classList[1] === lastFlipped.firstElementChild.classList[1])) {
+    return true;
+  }
+  return false;
+}
 /**
  * setup click logic counts pairs and matches using a last flipped approach
  * clickOk boolean used to prevent over clicking
  * counts determine winner
  * manipulates class to show and hide cards
- *
  */
 document.querySelectorAll('li.card').forEach(function(card) {
   card.addEventListener('click', function() {
@@ -158,30 +149,12 @@ document.querySelectorAll('li.card').forEach(function(card) {
     }
   }); //end addEventListener
 }); //end querySelectorAll
-
 /**
- * uses class list of childElement to match images
- * returns Boolean whether matched
- */
-function gotAMatch(lastFlipped, card) {
-  //if (document.querySelectorAll('li.card.open.show:not(.match)').length < 2) {
-  if (openCount < 2) {
-    return false;
-    //  } else if ((document.querySelectorAll('li.card.open.show:not(.match)').length === 2) &&
-  } else if ((openCount === 2) &&
-    (card.firstElementChild.classList[1] === lastFlipped.firstElementChild.classList[1])) {
-    return true;
-  }
-  return false;
-}
-
-/**
- * enable reset on click of reset icon
+ * enable reset on click of reset icon and reset text
  */
 document.querySelector('i.fa-repeat').addEventListener('click', function() {
   resetTheDeck()
 });
-
 document.querySelector('.restart-text').addEventListener('click', function() {
   resetTheDeck()
 });

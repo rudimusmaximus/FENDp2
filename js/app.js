@@ -1,6 +1,6 @@
 // explore some possible global values to use
-let clickIsOk, wonBooolean = false;
-let openCount, matchCount, pairCount = 0;
+let clickIsOk, wonBoolean = false;
+let openCount, matchCount, pairCount, moveCount = 0;
 const totalCardsInDeck = 16;
 let starCount = 3;
 let lastFlipped = null;
@@ -41,6 +41,7 @@ function resetTheDeck() {
   matchCount = 0;
   pairCount = 0;
   openCount = 0;
+  moveCount = 0;
   lastFlipped = null;
 
   clickIsOk = true;
@@ -66,13 +67,16 @@ function shuffle(array) {
  * increments the move counter and displays it on the page
  */
  function incrementMoveCounter(){
-
+   moveCount++;
+   //update screen
+   document.querySelector('.moves').textContent = ' '+moveCount;
  }
  /**
   * display winning message with final score
   */
   function youWonMessenger(){
-
+    clickIsOk = false;
+    console.log('we have a winner!');
   }
 /**
  * uses class list of childElement to match images
@@ -101,17 +105,18 @@ document.querySelectorAll('li.card').forEach(function(card) {
       console.log('card clicked');
       if (card.classList.contains('match')) {
         console.log('already matched')
+        return;
       } else if (card.classList.contains('open')) {
         console.log('already opened')
+        return;
       } else {
         card.classList.add('open', 'show');
         openCount++;
+        incrementMoveCounter();
       }
       if (lastFlipped) {
         if (gotAMatch(lastFlipped, card)) {
-
           console.log('we have a match');
-
           //take both and make them a match
           card.classList.add('match');
           matchCount++;
@@ -121,13 +126,12 @@ document.querySelectorAll('li.card').forEach(function(card) {
           matchCount++;
           lastFlipped.classList.remove('open');
           openCount--;
-
           lastFlipped = null;
           pairCount++;
           if ((pairCount === 8) && (matchCount === 16)) {
             //if (matchCount === 16) {
             wonBoolean = true;
-            console.log('we have a winner!');
+            youWonMessenger();
           }
         } else if (openCount === 2) { //not a match and two open cards showing
           clickIsOk = false;

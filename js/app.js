@@ -1,5 +1,5 @@
 // explore some possible global values to use
-let clickIsOk = true;
+let clickIsOk = false;
 let openCount = 0;
 let matchCount = 0;
 let pairCount = 0;
@@ -70,6 +70,7 @@ function resetTheDeck() {
   openCount = 0;
   lastFlipped = null;
 
+  clickIsOk = true;
   console.log('reset complete');
 }
 /**
@@ -178,5 +179,9 @@ function gotAMatch(lastFlipped, card) {
  * enable reset on click of reset icon
  */
 document.querySelector('i.fa-repeat').addEventListener('click', function() {
+  resetTheDeck()
+});
+
+document.querySelector('.restart-text').addEventListener('click', function() {
   resetTheDeck()
 });

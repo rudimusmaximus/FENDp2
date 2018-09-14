@@ -71,7 +71,16 @@ function shuffle(array) {
    moveCount++;
    //update screen
    document.querySelector('.moves').textContent = ' '+moveCount;
+   if((moveCount === 16) || (moveCount === 32) || (moveCount === 48)){
+     demoteStar();
+   }
  }
+ /**
+  * removes one stars
+  */
+  function demoteStar(){
+    document.querySelectorAll('.stars')[0].lastElementChild.remove('.fa-star');
+  }
  /**
   * display winning message with final score
   */

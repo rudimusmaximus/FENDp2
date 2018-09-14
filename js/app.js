@@ -106,16 +106,16 @@ function shuffle(array) {
 
 document.querySelectorAll('li.card').forEach(function(card) {
   card.addEventListener('click', function() {
-    if (clickIsOk) {
+    if ((clickIsOk) && (openCount < 2)) {
       console.log('card clicked');
       if (card.classList.contains('match')) {
         console.log('already matched')
       } else if (card.classList.contains('open')) {
         console.log('already opened')
       } else {
-        card.classList.add('open', 'show');
-        openCount++;
-      }
+          card.classList.add('open', 'show');
+          openCount++;
+        }
       if (lastFlipped) {
         if (gotAMatch(lastFlipped, card)) {
           console.log('we have a match');

@@ -1,11 +1,14 @@
 // explore some possible global values to use
-let matchCount = 1;
+let matchCount = 0;
+let pairCount = 0;
 const totalCardsInDeck = 16;
 let unmatchedCandidateCount = 1;
 let starCount = 3;
 let currentElement = null;
 let lastFlipped = null;
-
+let openCount = 0;
+let wonBoolean = false;
+let clickIsOk = true;
 /*
  * Create a list that holds all of your cards
  */
@@ -101,36 +104,65 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-//make cards click able
-// works but we don't count number of live/open cards
-//
 document.querySelectorAll('li.card').forEach(function(card) {
   card.addEventListener('click', function() {
-    console.log('card clicked');
-    if (card.classList.contains('match')) {
-      console.log('already matched')
-    } else if (card.classList.contains('open')) {
-      console.log('already opened')
-    } else {
-      card.classList.add('open');
-    }
-    if (lastFlipped) {
-      if(gotAMatch(lastFlipped, card)){
-        console.log('we have a match logic needed');
-        //TODO: placeholder remove open add match class
+    if (clickIsOk) {
+      console.log('card clicked');
+      if (card.classList.contains('match')) {
+        console.log('already matched')
+      } else if (card.classList.contains('open')) {
+        console.log('already opened')
       } else {
-        //TODO: placeholder
-        console.log('placeholder logic always says not a match');
-      };
-      lastFlipped = card;
-    } else {//first card flip
-      lastFlipped = card;
+        card.classList.add('open', 'show');
+        openCount++;
+      }
+      if (lastFlipped) {
+        if (gotAMatch(lastFlipped, card)) {
+          console.log('we have a match');
+          //take both and make them a match
+          document.querySelectorAll('li.card.open.show').forEach(function(card) {
+            card.classList.add('match');
+            card.classList.remove('open');
+            matchCount++;
+            openCount = 0;
+            lastFlipped = null;
+            pairCount++;
+            if ((pairCount === 8) && (matchCount === 16)) {
+              wonBoolean = true;
+              console.log('we have a winner!');
+            }
+          })
+        } else if (openCount === 2) { //not a match and two open cards showing
+          clickIsOk = false;
+          setTimeout(function onTimeout() {
+            document.querySelectorAll('li.card.open.show:not(.match)').forEach(function(card) {
+              card.classList.remove('open', 'show');
+              openCount = 0;
+              lastFlipped = null;
+            })
+          }, 1000);
+          clickIsOk = true;
+        }
+        lastFlipped = card;
+      } else { //first card flip
+        lastFlipped = card;
+      }
+    } else { //end if clickIsOk
+      return;
     }
-  });
-});
+  }); //end addEventListener
+}); //end querySelectorAll
 
 function gotAMatch(lastFlipped, card) {
-  return false; //TODO: placeholder
+  //if (document.querySelectorAll('li.card.open.show:not(.match)').length < 2) {
+  if (openCount < 2) {
+    return false;
+    //  } else if ((document.querySelectorAll('li.card.open.show:not(.match)').length === 2) &&
+  } else if ((openCount === 2) &&
+    (card.firstElementChild.classList[1] === lastFlipped.firstElementChild.classList[1])) {
+    return true;
+  }
+  return false;
 }
 /////TODO: placeholder draft code to remove...wip
 // function clickLogic(card) {
@@ -172,5 +204,7 @@ function gotAMatch(lastFlipped, card) {
 //     });
 //   };
 // }
-// enable reset on click of reset icon 
-document.querySelector('i.fa-repeat').addEventListener('click',function(){resetTheDeck()});
+// enable reset on click of reset icon
+document.querySelector('i.fa-repeat').addEventListener('click', function() {
+  resetTheDeck()
+});

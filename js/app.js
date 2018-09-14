@@ -42,6 +42,7 @@ function resetTheDeck() {
   pairCount = 0;
   openCount = 0;
   moveCount = 0;
+  document.querySelector('.moves').textContent = ' '+moveCount;//on screen
   lastFlipped = null;
 
   clickIsOk = true;

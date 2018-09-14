@@ -86,13 +86,11 @@ function demoteStar() {
  */
 function resetTheStars() {
   let nodeOfStars = document.querySelectorAll('.stars'); //the three given
-  let arrayOfStars = Array.from(nodeOfStars);
-
-  let howManyMakeThree = 3 - arrayOfStars[0].childElementCount;
+  let howManyMakeThree = 3 - nodeOfStars[0].childElementCount;
   let i = 0;
   if (howManyMakeThree > 0) {
     do {
-      arrayOfStars[0].insertAdjacentHTML('beforeend', '<li><i class="fa fa-star"></i></li>');
+      nodeOfStars[0].insertAdjacentHTML('beforeend', '<li><i class="fa fa-star"></i></li>');
       i++;
     } while (i < howManyMakeThree);
   } else {

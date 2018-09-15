@@ -4,6 +4,38 @@ let openCount, matchCount, pairCount, moveCount = 0;
 const totalCardsInDeck = 16;
 let starCount = 3;
 let lastFlipped = null;
+let intervalId = null;
+let duration = 0;
+/**
+ * interval startTimer
+ */
+function startTimer() {
+  let minutes = 0;
+  let seconds = 0;
+  minutes = Math.floor(duration / 60);
+  seconds = duration % 60;
+  duration = 0;
+  updateScreenTimer(minutes, seconds);
+  intervalId = setInterval(() => {
+    duration++;
+    minutes = Math.floor(duration / 60);
+    seconds = duration % 60;
+    updateScreenTimer(minutes, seconds);
+    console.log(duration + ' update timer');
+  }, 1000);
+}
+/**
+ * updates the on screen timer
+ * takes minutes and seconds to update the displayed duration
+ */
+function updateScreenTimer(min, sec) {
+  const timer = document.querySelector('.duration');
+  if (sec < 10) {
+    timer.innerHTML = min+':0'+sec;
+  } else {
+    timer.innerHTML = min+':'+sec;
+  }
+}
 /*
  * Create a list that holds all of your cards
  */
@@ -13,6 +45,7 @@ let allTheCardsArray = null;
  * puts cards face down, forgets open, matches, and shuffles deck
  */
 function resetTheDeck() {
+  clearInterval(intervalId);//clears timer if one was running
   //hide, unmatch
   let i = 0;
   do {
@@ -46,6 +79,7 @@ function resetTheDeck() {
   lastFlipped = null;
   resetTheStars();
   clickIsOk = true;
+  startTimer();
   console.log('reset complete');
 }
 /**
@@ -79,12 +113,14 @@ function incrementMoveCounter() {
  * removes one stars
  */
 function demoteStar() {
+  starCount--;
   document.querySelectorAll('.stars')[0].lastElementChild.remove('.fa-star');
 }
 /**
  * Reset the stars to three
  */
 function resetTheStars() {
+  starCount = 3;
   let nodeOfStars = document.querySelectorAll('.stars'); //the three given
   let howManyMakeThree = 3 - nodeOfStars[0].childElementCount;
   let i = 0;
@@ -102,7 +138,11 @@ function resetTheStars() {
  */
 function youWonMessenger() {
   clickIsOk = false;
+  clearInterval(intervalId);
   console.log('we have a winner!');
+  console.log(moveCount + ' moves in ' + duration + ' m:s');
+  console.log('You are a ' + starCount + ' star player.');
+  console.log('Would you like to play again? Y/N');
 }
 /**
  * uses class list of childElement to match images

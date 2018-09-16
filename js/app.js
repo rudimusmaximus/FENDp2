@@ -1,5 +1,5 @@
 // explore some possible global values to use
-let clickIsOk, wonBoolean = false;
+let clickIsOk, wonBoolean, timerIsRunning = false;
 let openCount, matchCount, pairCount, moveCount = 0;
 const totalCardsInDeck = 16;
 let starCount = 3;
@@ -12,8 +12,6 @@ let duration = 0;
 function startTimer() {
   let minutes = 0;
   let seconds = 0;
-  minutes = Math.floor(duration / 60);
-  seconds = duration % 60;
   duration = 0;
   updateScreenTimer(minutes, seconds);
   intervalId = setInterval(() => {
@@ -21,8 +19,9 @@ function startTimer() {
     minutes = Math.floor(duration / 60);
     seconds = duration % 60;
     updateScreenTimer(minutes, seconds);
-    console.log(duration + ' update timer');
   }, 1000);
+  timerIsRunning = true;
+  return;
 }
 /**
  * updates the on screen timer
@@ -35,6 +34,7 @@ function updateScreenTimer(min, sec) {
   } else {
     timer.innerHTML = min + ':' + sec;
   }
+  return;
 }
 /*
  * Create a list that holds all of your cards
@@ -44,10 +44,16 @@ let allTheCardsArray = null;
 /*
  * puts cards face down, forgets open, matches, and shuffles deck
  */
-function resetTheDeck() {
+function resetTheGame() {
+  if (timerIsRunning) {
+    clearInterval(intervalId);
+  }
   if (wonBoolean) {
-    toggleModal(); //hide the win stat modal
-    clearInterval(intervalId); //clears timer if one was running
+    wonBoolean = false;
+  }
+  //if showing win modal, hide it
+  if (!document.querySelector('.modal__background').classList.contains('hide')) {
+    toggleModal();
   }
   //hide, unmatch
   let i = 0;
@@ -83,8 +89,8 @@ function resetTheDeck() {
   resetTheStars();
   clickIsOk = true;
   startTimer();
-  console.log('reset complete');
-} //end resetTheDeck
+  return;
+} //end resetTheGame
 /**
  * Shuffle function from http://stackoverflow.com/a/2450976
  */
@@ -141,13 +147,19 @@ function resetTheStars() {
  */
 function youWonMessenger() {
   clickIsOk = false;
-  clearInterval(intervalId);
+
+  if (timerIsRunning) {
+    clearInterval(intervalId);
+  }
+
   document.querySelector('.modal__time').textContent =
     ('Time = ' + document.querySelector('.duration').textContent + ' m:s');
   document.querySelector('.modal__stars').textContent =
     ('Star(s) = ' + document.querySelectorAll('.stars')[0].childElementCount);
   document.querySelector('.modal__moves').textContent = 'Moves = ' + moveCount;
-  toggleModal();
+  if (document.querySelector('.modal__background').classList.contains('hide')) {
+    toggleModal();
+  }
 }
 /**
  * shows or hides the win stats modal
@@ -180,12 +192,9 @@ function gotAMatch(lastFlipped, card) {
 document.querySelectorAll('li.card').forEach(function(card) {
   card.addEventListener('click', function() {
     if ((clickIsOk) && (openCount < 2)) {
-      console.log('card clicked');
       if (card.classList.contains('match')) {
-        console.log('already matched')
         return;
       } else if (card.classList.contains('open')) {
-        console.log('already opened')
         return;
       } else {
         card.classList.add('open', 'show');
@@ -194,7 +203,6 @@ document.querySelectorAll('li.card').forEach(function(card) {
       }
       if (lastFlipped) {
         if (gotAMatch(lastFlipped, card)) {
-          console.log('we have a match');
           //take both and make them a match
           card.classList.add('match');
           matchCount++;
@@ -235,8 +243,20 @@ document.querySelectorAll('li.card').forEach(function(card) {
  * enable reset on click of reset icon and reset text
  */
 document.querySelector('i.fa-repeat').addEventListener('click', function() {
-  resetTheDeck()
+  resetTheGame()
 });
 document.querySelector('.restart-text').addEventListener('click', function() {
-  resetTheDeck()
+  resetTheGame()
+});
+/*
+ * enable the click events for the win modal
+ */
+document.querySelector('.modal__close').addEventListener('click', function() {
+  toggleModal();
+});
+document.querySelector('.modal__cancel').addEventListener('click', function() {
+  toggleModal();
+});
+document.querySelector('.modal__replay').addEventListener('click', function() {
+  resetTheGame();
 });

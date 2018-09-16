@@ -31,9 +31,9 @@ function startTimer() {
 function updateScreenTimer(min, sec) {
   const timer = document.querySelector('.duration');
   if (sec < 10) {
-    timer.innerHTML = min+':0'+sec;
+    timer.innerHTML = min + ':0' + sec;
   } else {
-    timer.innerHTML = min+':'+sec;
+    timer.innerHTML = min + ':' + sec;
   }
 }
 /*
@@ -45,7 +45,10 @@ let allTheCardsArray = null;
  * puts cards face down, forgets open, matches, and shuffles deck
  */
 function resetTheDeck() {
-  clearInterval(intervalId);//clears timer if one was running
+  if (wonBoolean) {
+    toggleModal(); //hide the win stat modal
+    clearInterval(intervalId); //clears timer if one was running
+  }
   //hide, unmatch
   let i = 0;
   do {
@@ -81,7 +84,7 @@ function resetTheDeck() {
   clickIsOk = true;
   startTimer();
   console.log('reset complete');
-}
+} //end resetTheDeck
 /**
  * Shuffle function from http://stackoverflow.com/a/2450976
  */
@@ -139,10 +142,19 @@ function resetTheStars() {
 function youWonMessenger() {
   clickIsOk = false;
   clearInterval(intervalId);
-  console.log('we have a winner!');
-  console.log(moveCount + ' moves in ' + duration + ' m:s');
-  console.log('You are a ' + starCount + ' star player.');
-  console.log('Would you like to play again? Y/N');
+  document.querySelector('.modal__time').textContent =
+    ('Time = ' + document.querySelector('.duration').textContent + ' m:s');
+  document.querySelector('.modal__stars').textContent =
+    ('Star(s) = ' + document.querySelectorAll('.stars')[0].childElementCount);
+  document.querySelector('.modal__moves').textContent = 'Moves = ' + moveCount;
+  toggleModal();
+}
+/**
+ * shows or hides the win stats modal
+ */
+function toggleModal() {
+  const modal = document.querySelector('.modal__background');
+  modal.classList.toggle('hide');
 }
 /**
  * uses class list of childElement to match images

@@ -1,4 +1,8 @@
 # Memory Game Project
+Click reset to start, match all symbols two cards at a time. Remember what you
+see to match them all in as few moves as possible and in little time as possible.
+Star ratings of three stars for fifteen moves or less, two for thirty-one or less
+and one for thirty-two or more moves to win.  
 
 ## Table of Contents
 
@@ -20,26 +24,6 @@ This repository is the starter code for _all_ Udacity students. Therefore, we mo
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 
 # My Notes Completing This
-# Ongoing Questions and Lessons Learned  
-
-## Questions as I Completed this:  
-These are working notes, I'll be seeking answers on these questions over time.
-
-| Question | Answer |
-| :--- | :--- |
-| 1.  |  |
-| 2.  |  |
-| 3.  |  |
-| 4.  |  |
-| 5.  |  |
-| 6.  |  |  
-| 7.  |  |
-| 8.  |  |  
-
-**Example for Question x**
-```
-// notes
-```  
 
 ## Lessons learned:  
 
@@ -47,8 +31,8 @@ These are working notes, I'll be seeking answers on these questions over time.
 | :--- | :--- |
 | 1. Elements, nodes, arrays | a. When you select a list of elements or a node, these are array like objects. So if you want to do array things with them, one technique is Array.from() |
 | 2. not exclusions in query selectors | a. you can use pseudo CSS3 selectors to do exclusions! see https://stackoverflow.com/questions/35137517/adding-an-exception-for-queryselectorall |
-| 3. .filter with .map handy | a. see example |
-| 4. event loop | a. [set timeout use](https://www.youtube.com/watch?v=8aGhZQkoFbQ) |  
+| 3. .filter with .map handy | a. see example however I didn't need any |
+| 4. event loop | a. [set timeout use](https://www.youtube.com/watch?v=8aGhZQkoFbQ) b. would like to study this more. |  
 
 **Example for Lesson 3**
 From this elegant and [short video](https://www.youtube.com/watch?v=D0FzqTWedM0&feature=push-u-sub&attr_tag=4QuNiXqbrIloXwVe%3A6).
@@ -68,27 +52,19 @@ const nonEmptyFields =
 ```  
 ## Assumptions required to solve the problem
 The following assumptions were made by evaluation the code and experimenting with query selections results.
-
 - class name is a small set that will vary in their order in the elements[#].classList
 - elements[#].firstElementChild.classList does not vary in order, and the 0 item is fa (assume font awesome as this is part of the stylesheet prefetch), item 1 is the name of the object
 so
-- decks have 16 cards
-- cards have class card and additionally
-  - are visible with show class
-  - when first made visible they are given open class
-  - when paired they are given match and open is removed
-- to access the shape name, node[#].firstElementChild.classList[1] might equal say fa-diamond or fa-bolt; this should be enough to match skip matching
+  - decks have 16 cards
+  - cards have class card and additionally
+    - are visible with show class
+    - when first made visible they are given open class
+    - when paired they are given match and open is removed
+    - to access the shape name, node[#].firstElementChild.classList[1] might equal say fa-diamond or fa-bolt; this should be enough to match
 
-Logic:
-click >
-make card open and show
-does class list for card include match, if so, remove open
-  else card is open show to be matched (candidates)
-  is card on not matched list by query what's not match
-if yes,
+## Work Flow
+I followed git commit guidelines, a 'Git Flow' branching model committing into develop until ready to test hosting and GitHub hosting. The repo is a fork hosted on GitHub. I used Atom and GitKraken with a Chrome browser for testing.
 
-## DevFlow
-I used my DevFlow process to do this work did not create issues for each section of the rubric. I did use following git commit guidelines, a 'Git Flow' branching model, and a custom label scheme. Hosted on GitHub and used Atom and GitKraken with it's new "Glo Boards".
-Part of my evolving way of doing projects.
+My focus is to catch up in the course, so I'm going to try to stick only to the requirements. I struggled with the model piece for lack of practice, but it's starting to make sense.
 
-My focus is to catch up in the course, so I'm going to try to stick only to the requirements only.
+Now to finish in time! Thanks for reading this.

@@ -7,7 +7,7 @@ let lastFlipped = null;
 let intervalId = null;
 let duration = 0;
 /**
- * interval startTimer
+ * @description Starts an interval timer
  */
 function startTimer() {
   let minutes = 0;
@@ -24,8 +24,8 @@ function startTimer() {
   return;
 }
 /**
- * updates the on screen timer
- * takes minutes and seconds to update the displayed duration
+ * @description Updates the on screen timer takes minutes and seconds
+ * to update the displayed duration
  */
 function updateScreenTimer(min, sec) {
   const timer = document.querySelector('.duration');
@@ -42,7 +42,7 @@ function updateScreenTimer(min, sec) {
 let allTheCardsNodeList = document.querySelectorAll('ul.deck li');
 let allTheCardsArray = null;
 /*
- * puts cards face down, forgets open, matches, and shuffles deck
+ * @description Puts cards face down, forgets open, matches, and shuffles deck
  */
 function resetTheGame() {
   if (timerIsRunning) {
@@ -92,10 +92,10 @@ function resetTheGame() {
   return;
 } //end resetTheGame
 /**
- * Shuffle function from http://stackoverflow.com/a/2450976
+ * @description Shuffle function from http://stackoverflow.com/a/2450976
  */
 function shuffle(array) {
-  var currentIndex = array.length,
+  let currentIndex = array.length,
     temporaryValue, randomIndex;
 
   while (currentIndex !== 0) {
@@ -107,8 +107,8 @@ function shuffle(array) {
   }
   return array;
 }
-/*
- * increments the move counter and displays it on the page
+/**
+ * @description Increments the move counter and displays it on the page
  */
 function incrementMoveCounter() {
   moveCount++;
@@ -119,14 +119,14 @@ function incrementMoveCounter() {
   }
 }
 /**
- * removes one stars
+ * @description Removes one star
  */
 function demoteStar() {
   starCount--;
   document.querySelectorAll('.stars')[0].lastElementChild.remove('.fa-star');
 }
 /**
- * Reset the stars to three
+ * @description Resets the stars to three
  */
 function resetTheStars() {
   starCount = 3;
@@ -143,7 +143,7 @@ function resetTheStars() {
   }
 }
 /**
- * display winning message with final score
+ * @description Displays winning message with final score
  */
 function youWonMessenger() {
   clickIsOk = false;
@@ -155,21 +155,21 @@ function youWonMessenger() {
   document.querySelector('.modal__time').textContent =
     ('Time = ' + document.querySelector('.duration').textContent + ' m:s');
   document.querySelector('.modal__stars').textContent =
-    ('Star(s) = ' + document.querySelectorAll('.stars')[0].childElementCount);
+    ('Stars = ' + document.querySelectorAll('.stars')[0].childElementCount);
   document.querySelector('.modal__moves').textContent = 'Moves = ' + moveCount;
   if (document.querySelector('.modal__background').classList.contains('hide')) {
     toggleModal();
   }
 }
 /**
- * shows or hides the win stats modal
+ * @description Shows or hides the win stats modal
  */
 function toggleModal() {
   const modal = document.querySelector('.modal__background');
   modal.classList.toggle('hide');
 }
 /**
- * uses class list of childElement to match images
+ * @description Uses class list of childElement to match images
  * returns Boolean whether matched
  */
 function gotAMatch(lastFlipped, card) {
@@ -183,8 +183,8 @@ function gotAMatch(lastFlipped, card) {
   }
   return false;
 }
-/**
- * setup click logic counts pairs and matches using a last flipped approach
+/*
+ * Setup click logic counts pairs and matches using a last flipped approach
  * clickOk boolean used to prevent over clicking
  * counts determine winner
  * manipulates class to show and hide cards
@@ -239,8 +239,8 @@ document.querySelectorAll('li.card').forEach(function(card) {
     }
   }); //end addEventListener
 }); //end querySelectorAll
-/**
- * enable reset on click of reset icon and reset text
+/*
+ * enables reset on click of reset icon and reset text
  */
 document.querySelector('i.fa-repeat').addEventListener('click', function() {
   resetTheGame()
